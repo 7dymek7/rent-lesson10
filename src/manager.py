@@ -94,6 +94,11 @@ class Manager:
         Raises:
             ValueError: If the apartment key does not exist.
 
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.generate_apartment_events_report("A1")
+
         """
         if apartment_key not in self.apartments:
             raise ValueError("Apartment key does not exist")
@@ -111,6 +116,12 @@ class Manager:
         Returns:
             bool: True if all tenants have valid apartment keys.
 
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.check_tenants_apartment_keys()
+            True
+
         """
         for tenant in self.tenants.values():
             if tenant.apartment not in self.apartments:
@@ -125,6 +136,11 @@ class Manager:
 
         Returns:
             Apartment | None: Apartment object or None if not found.
+
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.get_apartment("A1")
 
         """
         return self.apartments.get(apartment_key, None)
@@ -147,6 +163,11 @@ class Manager:
 
         Raises:
             ValueError: If month is outside 1–12.
+
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.get_apartment_costs("A1", 2023, 5)
 
         """
         if month is not None and (month < 1 or month > 12):
@@ -185,6 +206,11 @@ class Manager:
         Raises:
             ValueError: If month is outside 1–12.
 
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.get_settlement("A1", 2023, 5)
+
         """
         if month < 1 or month > 12:
             raise ValueError("Month must be between 1 and 12")
@@ -218,6 +244,12 @@ class Manager:
 
         Raises:
             ValueError: If month is outside 1–12.
+
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> settlement = manager.get_settlement("A1", 2023, 5)
+            >>> manager.create_tenants_settlements(settlement)
 
         """
         if apartment_settlement.month < 1 or apartment_settlement.month > 12:
@@ -258,8 +290,11 @@ class Manager:
         Returns:
             list[str]: Names of tenants who owe money.
 
-        Raises:
-            ValueError: If month is outside 1–12.
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.get_debtors("A1", 2023, 5)
+            ['Jan Kowalski', 'Anna Nowak']
 
         """
         if month < 1 or month > 12:
@@ -301,6 +336,11 @@ class Manager:
         Returns:
             float: Rounded tax amount.
 
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.calculate_tax(2023, 5, 0.12)
+
         """
         total_income = sum(
             transfer.amount_pln
@@ -314,6 +354,11 @@ class Manager:
 
         Returns:
             float: Positive value means surplus, negative means deficit.
+
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.check_deposits()
 
         """
         total_deposits = 0.0
@@ -331,13 +376,19 @@ class Manager:
         return total_deposits - total_due
 
     def get_annual_balance(self, year: int) -> float:
-        """Calculate annual financial balance.
+        """Calculate the annual financial balance.
 
         Args:
             year (int): Year to calculate balance for.
 
         Returns:
-            float: Income minus expenses.
+            float: Income minus expenses for the given year.
+
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.get_annual_balance(2023)
+            15420.0
 
         """
         total_income = sum(
@@ -364,6 +415,11 @@ class Manager:
         Raises:
             ValueError: If month is outside 1–12 or apartment does not exist.
 
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.has_any_bills("A1", 2023, 5)
+
         """
         if month < 1 or month > 12:
             raise ValueError("Month must be between 1 and 12")
@@ -385,6 +441,11 @@ class Manager:
         Returns:
             bool: True if all transfers are valid.
 
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.check_transfers_amount_range()
+
         """
         for transfer in self.transfers:
             if (
@@ -403,6 +464,11 @@ class Manager:
         Returns:
             bool: True if tenant is blacklisted.
 
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.check_tenant_blacklist("Jan Kowalski")
+
         """
         return any(
             entry for entry in self.tenants_blacklist if entry.tenant == tenant_name
@@ -413,6 +479,11 @@ class Manager:
 
         Returns:
             bool: True if all transfers are valid.
+
+        Example:
+            >>> params = Parameters()
+            >>> manager = Manager(params)
+            >>> manager.check_transfers_tenant()
 
         """
         for transfer in self.transfers:
